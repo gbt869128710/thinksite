@@ -1,0 +1,29 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+html,
+body {
+    height: 100%;
+    font-family: 'Microsoft YaHei';
+    font-size: 14px;
+}
+
+a,
+a:hover,
+a:visited {
+    text-decoration: none;
+    color: #000000;
+}
+
+ol,
+ul,
+li {
+    list-style-type: none;
+}
+
+input {
+    width: 80px;
+    outline: none;
+}

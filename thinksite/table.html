@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>homework</title>
+    <link rel="stylesheet" href="css/table.css">
+</head>
+
+<body>
+    <div class="top">首页/我的课程/课程列表</div>
+    <div class="center">
+        <span>分类：</span>
+
+        <input type="text" class="classify">
+        <span> &nbsp;&nbsp;标题：</span>
+        <input type="text" class="title">
+        <span>&nbsp;&nbsp;班级：</span>
+        <input type="text" class="grade">
+        <span>&nbsp;&nbsp;状态：</span>
+        <input type="text" class="status">
+        <span>&nbsp;&nbsp;创建时间：</span>
+        <input type="text" class="time">
+        <span>&nbsp;&nbsp;创建者：</span>
+        <input type="text" class="creator">
+
+        <span>&nbsp;&nbsp;分校地区：</span>
+        <input type="text" class="area">
+        <input type="button" class="addBtn" value="录入">
+        <span class="error">请勿留空</span>
+    </div>
+    <table>
+        <thead>
+            <th>
+                <input type="checkbox" class="check1">
+                <span class="list">ID&nbsp;↓</span>
+            </th>
+            <th>
+                <span> 分类</span>
+            </th>
+            <th>
+                <span> 标题</span>
+            </th>
+            <th>
+                <span> 班级</span>
+            </th>
+            <th>
+                <span>状态</span>
+            </th>
+            <th>
+                <span>创建时间</span>
+            </th>
+            <th>
+                <span> 创建者</span>
+            </th>
+            <th>
+                <span>分校地区</span>
+            </th>
+            <th>
+                <span>删除</span>
+            </th>
+        </thead>
+        <tbody>
+
+        </tbody>
+
+    </table>
+    <div class="cols">
+        <input type="text" class="gather">
+        <input type="button" class="del" value="删除">
+    </div>
+</body>
+
+</html>
+<script src="js/jquery.min.js"></script>
+<script src="js/table.js"></script>
+<script src="js/data.js"></script>
+<!--<script src="js/js.js"></script>-->
