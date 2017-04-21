@@ -5,7 +5,7 @@ $(function () {
     function initHtml(json) {
         var html_ = '<tr title="' + json.id + '">' +
             '<td>' +
-            '<input type="checkbox" class="check2">' +
+            '<input type="checkbox" name="checkbox" class="check2" title="' + json.id + '">' +
             '<span class="id1">' + json.id + '</span>' +
             '</td>' +
             '<td>' +
@@ -54,26 +54,30 @@ $(function () {
         //        }
     }
     initialize(data);
-
-    $("body").on("click", ".delete", function () {
-        var id = parseInt($(this).attr("title"));
-        var ind = $(this).parent("td").parent("tr").index();
+    //删除数组里的内容
+    function delfunc(Maybel) {
         for (var i = 0; i < data.length; i++) {
-            if (id == data[i].id) {
+            if (Maybel == data[i].id) {
                 data.splice(i, 1)
-                $("tbody tr").eq(ind).remove();
+
             }
 
         }
-
+    }
+    //点击“删除”按钮删除每行的内容
+    $("body").on("click", ".delete", function () {
+        var Maybel = parseInt($(this).attr("title"));
+        $(this).parent().parent().remove();
+        delfunc(Maybel);
     })
+    //给新建的ID最大值
     var id_ = null;
     $.each(data, function (key, val) {
         if (id_ < val.id) {
             id_ = val.id;
         }
     })
-
+    //录入
     function updateHtml(data, class_) {
         data.unshift({
             id: id_,
@@ -87,28 +91,32 @@ $(function () {
         })
 
         $(".center input[type='text']").val("");
-        if ($(".center input[type='text']").val() == '') {
-            $(".error").show();
-            $(".addBtn").attr("disabled");
-        } else {
-            $(".error").hide();
-            $(".addBtn").removeAttr("disabled");
-        }
+
         initialize(data);
     }
+    //录入的判断
     $(".addBtn").on("click", function () {
-        id_ = id_ + 1;
-        updateHtml(data, {
-            classify: '.classify',
-            title: '.title',
-            grade: '.grade',
-            status: '.status',
-            time: '.time',
-            creator: '.creator',
-            area: '.area'
-        })
-    })
 
+        if ($(".classify").val() == "" || $(".title").val() == "" || $(".grade").val() == "" || $(".status").val() == "" || $(".time").val() == "" || $(".creator").val() == "" || $(".area").val() == "") {
+            $(".error").show();
+
+        } else {
+            id_ = id_ + 1;
+            updateHtml(data, {
+                classify: '.classify',
+                title: '.title',
+                grade: '.grade',
+                status: '.status',
+                time: '.time',
+                creator: '.creator',
+                area: '.area'
+            })
+            $(".error").hide();
+            $(".check1").removeAttr("checked");
+        }
+
+    })
+    //排序的方法
     function handle(data, status, fun) {
         var emp = null;
         if (status) {
@@ -133,10 +141,10 @@ $(function () {
                 }
             }
         }
-        fun(); //initPage(data);
+        fun(); //initialize(data);
     }
-
-    $(".list").on("click", function () {
+    //点击排序
+    $(".allid").on("click", function () {
         if ($(this).hasClass("h")) {
             handle(data, true, function () {
                 initialize(data);
@@ -150,7 +158,7 @@ $(function () {
             $(this).text("ID ↑").addClass("h");
         }
     })
-
+    //全选
     var status = 0;
     $(".check1").on("click", function () {
         if ($(".check1").is(":checked")) {
@@ -165,29 +173,11 @@ $(function () {
 
     })
 
-    $(".del").on("click", function () {
-        $(".check2:checked").parent().parent().remove();
-        //        var id = $(".check2:checked").parent("td").parent("tr").index();
-        //        var ids = [];
-        //        for (var i = 0; i <= $(".check2:checked").length - 1; i++) {
-        //            ids.push($("tbody tr").eq(i).attr('title'));
-        //        }
-        //
-        //        var ind = $(".check2:checked").parent("td").parent("tr").index();
-        //        for (var i = 0; i < ids.length; i++) {
-        //            if (ids[i] == data[i].id) {
-        //                data.splice(i, 1); // 删除第key个值  删除1个
-        //                $("tbody tr").eq(ids[i] - 1).remove();
-        //            }
-        //        }
-        //
-        //
-        $(".check1").removeAttr("checked");
-    })
+
     //勾选checkbox后面的id要出现在gather里
     $(".check2").on("change", function () {
         var arr = [];
-        $(".check2:checked").each(function () {
+        $("input[name='checkbox']:checked").each(function () {
             arr.push($(this).siblings(".id1").text())
         })
         $(".gather").val(arr);
@@ -195,7 +185,23 @@ $(function () {
             $(".check1").removeAttr("checked");
         }
     })
+    //点击全部删除可以将勾选的每行删除
+    $(".del").on("click", function () {
+        var leng = $(".check2:checked").length
+        var id = parseInt($(".check2:checked").attr("title"));
+        $(".check2:checked").parent('td').parent('tr').remove();
+        for (var i = 0; i < data.length; i++) {
+            if (id == data[i].id) {
+                data.splice(i, leng); // 删除第key个值  删除checked的个数
+            }
+        }
+        $(".check1").removeAttr("checked");
+        $(".gather").val("");
+    })
+
+
     $("tbody tr").eq(0).addClass("bg").siblings("tr").removeClass("bg");
+    //点击键盘上的上、下键和delete可以进行上移、下移和删除
     $(window).keydown(function (e) {
         var key = e.keyCode;
         var index = $("tr.bg").index();
@@ -213,26 +219,22 @@ $(function () {
                 $("tbody tr").eq(index).addClass("bg").siblings("tr").removeClass("bg");
                 break;
             case 46:
-                var id = parseInt($("tbody tr.bg").attr("title"));
-                var ind = $(this).parent("td").parent("tr").index();
-                for (var i = 0; i < data.length; i++) {
-                    if (id == data[i].id) {
-                        data.splice(i, 1)
-                        $("tbody tr").eq(ind).remove();
-                    }
-
+                var Maybel = parseInt($("tbody tr.bg").attr("title"));
+                delfunc(Maybel);
+                if ($("tbody tr").hasClass("bg")) {
+                    $("tbody tr").eq(index).remove();
                 }
+                $("tbody tr").eq(0).addClass("bg").siblings("tr").removeClass("bg");
                 break;
         }
     })
-
-
+    //点击表格里的每格（除id那格外）点击一下可进行修改
     $("body").on("click", "td", function () {
-        $(this).children("input").removeAttr("disabled");
+        $(".inp").removeAttr("disabled");
     })
 
     $("body").on("blur", "td", function () {
-        $(this).children("input").attr("disabled", true);
+        $(".inp").attr("disabled", true);
     })
 
 })
