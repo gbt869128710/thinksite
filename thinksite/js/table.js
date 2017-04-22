@@ -71,16 +71,21 @@ $(function () {
         delfunc(Maybel);
     })
     //给新建的ID最大值
-    var id_ = null;
-    $.each(data, function (key, val) {
-        if (id_ < val.id) {
-            id_ = val.id;
-        }
-    })
+    function getid(data) {
+        var id_ = null;
+        $.each(data, function (key, val) {
+            if (id_ < val.id) {
+                id_ = val.id;
+            }
+
+        })
+        return id_;
+    }
+
     //录入
     function updateHtml(data, class_) {
         data.unshift({
-            id: id_,
+            id: getid(data) + 1,
             classify: $(class_.classify).val(),
             title: $(class_.title).val(),
             grade: $(class_.grade).val(),
@@ -101,7 +106,6 @@ $(function () {
             $(".error").show();
 
         } else {
-            id_ = id_ + 1;
             updateHtml(data, {
                 classify: '.classify',
                 title: '.title',
@@ -188,7 +192,8 @@ $(function () {
     //点击全部删除可以将勾选的每行删除
     $(".del").on("click", function () {
         var leng = $(".check2:checked").length
-        var id = parseInt($(".check2:checked").attr("title"));
+        //        var id = parseInt($(".check2:checked").attr("title"));
+        var id = parseInt($(".check2:checked").parent('td').parent('tr').attr("title"));
         $(".check2:checked").parent('td').parent('tr').remove();
         for (var i = 0; i < data.length; i++) {
             if (id == data[i].id) {
